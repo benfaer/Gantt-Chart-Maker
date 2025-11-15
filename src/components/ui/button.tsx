@@ -10,12 +10,12 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
   { className, variant = 'default', size = 'md', ...props },
   ref
 ) {
-  const base = 'inline-flex items-center justify-center rounded-md font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none';
+  const base = 'inline-flex items-center justify-center rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]';
   const variants = {
-    default: 'bg-primary text-white hover:opacity-90',
-    outline: 'border border-gray-300 dark:border-gray-700 hover:bg-muted',
-    ghost: 'hover:bg-muted',
-    destructive: 'bg-red-600 text-white hover:bg-red-700',
+    default: 'gradient-primary text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5',
+    outline: 'border-2 border-border bg-card text-foreground hover:bg-muted hover:border-primary/30 shadow-soft',
+    ghost: 'text-foreground hover:bg-muted/80',
+    destructive: 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 hover:-translate-y-0.5',
   } as const;
   const sizes = {
     sm: 'h-8 px-3 text-sm',

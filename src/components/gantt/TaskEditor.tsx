@@ -19,6 +19,7 @@ export function TaskEditor({
   projectEndDate,
   onClose,
   onAddMilestone,
+  allTasks,
 }: {
   task: Task;
   projectId: string;
@@ -28,11 +29,13 @@ export function TaskEditor({
   projectEndDate: string;
   onClose: () => void;
   onAddMilestone?: () => void;
+  allTasks?: Task[];
 }) {
   const [name, setName] = useState(task.name);
   const [intervals, setIntervals] = useState<TaskInterval[]>(taskIntervals);
   const [color, setColor] = useState(task.color || '#e5e7eb');
   const isOverklasse = !task.parent_task_id;
+  const hasSubtasks = isOverklasse && allTasks?.some(t => t.parent_task_id === task.id);
 
   // 20 lyse pastellfarger
   const pastelColors = [
@@ -114,10 +117,10 @@ export function TaskEditor({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
-      <div className="bg-card border rounded-lg w-full max-w-xl p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Edit Task</h3>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div className="bg-card border-2 border-border rounded-2xl shadow-elevated w-full max-w-xl p-6 space-y-5">
+        <div className="flex items-center justify-between pb-2 border-b border-border">
+          <h3 className="text-xl font-bold tracking-tight">Edit Task</h3>
           <Button variant="ghost" onClick={onClose}>Close</Button>
         </div>
 
@@ -159,7 +162,12 @@ export function TaskEditor({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h4 className="font-medium">Intervals</h4>
-            <Button variant="outline" onClick={addInterval}>Add Interval</Button>
+            {!hasSubtasks && (
+              <Button variant="outline" onClick={addInterval}>Add Interval</Button>
+            )}
+            {hasSubtasks && (
+              <span className="text-sm text-muted-foreground">Intervals can only be added to subtasks</span>
+            )}
           </div>
           {intervals.map(i => (
             <div key={i.id} className="grid grid-cols-1 md:grid-cols-4 gap-2 items-end">
@@ -194,7 +202,12 @@ export function TaskEditor({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h4 className="font-medium">Milestones</h4>
-            <Button variant="outline" onClick={addMilestone}>Add Milestone</Button>
+            {!hasSubtasks && (
+              <Button variant="outline" onClick={addMilestone}>Add Milestone</Button>
+            )}
+            {hasSubtasks && (
+              <span className="text-sm text-muted-foreground">Milestones can only be added to subtasks</span>
+            )}
           </div>
         </div>
 

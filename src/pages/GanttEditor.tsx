@@ -188,9 +188,9 @@ export default function GanttEditor() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
       <div className="w-full mx-auto p-8">
-        <div className="bg-card rounded-lg border p-8">
+        <div className="bg-card rounded-2xl border border-border shadow-elevated p-8">
           <div className="flex items-center justify-between mb-8">
             <Button
               onClick={() => navigate("/")}
@@ -351,6 +351,7 @@ export default function GanttEditor() {
           )}
           projectStartDate={project.start_date}
           projectEndDate={project.end_date}
+          allTasks={tasks}
           onClose={() => {
             setEditingTask(null);
             loadProjectData();
@@ -394,7 +395,30 @@ export default function GanttEditor() {
             <h2 className="text-xl font-semibold mb-4">Select Parent Task</h2>
             <div className="space-y-2 max-h-96 overflow-y-auto mb-4">
               {tasks
-                .filter((t) => !t.parent_task_id)
+                .filter((t) => {
+                  // Only show overklasse tasks
+                  if (t.parent_task_id) return false;
+
+                  // Check if task has subtasks
+                  const hasSubtasks = tasks.some(
+                    (st) => st.parent_task_id === t.id
+                  );
+
+                  // If task already has subtasks, allow adding more
+                  if (hasSubtasks) return true;
+
+                  // If task doesn't have subtasks, check if it has intervals or milestones
+                  // If it has intervals or milestones, don't allow adding subtasks
+                  const hasIntervals = taskIntervals.some(
+                    (ti) => ti.task_id === t.id
+                  );
+                  const hasMilestones = milestones.some(
+                    (m) => m.task_id === t.id
+                  );
+
+                  // Only allow if it doesn't have intervals or milestones
+                  return !hasIntervals && !hasMilestones;
+                })
                 .map((task) => (
                   <button
                     key={task.id}
@@ -405,6 +429,23 @@ export default function GanttEditor() {
                   </button>
                 ))}
             </div>
+            {tasks.filter((t) => {
+              if (t.parent_task_id) return false;
+              const hasSubtasks = tasks.some(
+                (st) => st.parent_task_id === t.id
+              );
+              if (hasSubtasks) return true;
+              const hasIntervals = taskIntervals.some(
+                (ti) => ti.task_id === t.id
+              );
+              const hasMilestones = milestones.some((m) => m.task_id === t.id);
+              return !hasIntervals && !hasMilestones;
+            }).length === 0 && (
+              <p className="text-sm text-muted-foreground mb-4 text-center">
+                No tasks available. Tasks with intervals or milestones (that
+                don't already have subtasks) cannot have subtasks added.
+              </p>
+            )}
             <Button
               variant="outline"
               onClick={() => setShowAddSubtaskModal(false)}

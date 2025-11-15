@@ -19,8 +19,6 @@ A modern Gantt chart application built with React, TypeScript, and Supabase. Cre
 - Vite
 - Tailwind CSS
 - Supabase (PostgreSQL)
-- React Router DOM
-- html2canvas + jsPDF
 
 ## Quick Start
 

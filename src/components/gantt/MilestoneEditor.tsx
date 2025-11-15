@@ -59,10 +59,10 @@ export function MilestoneEditor({ milestone, projectId, projectStartDate, projec
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
-      <div className="bg-card border rounded-lg w-full max-w-xl p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">{isNew ? 'Create Milestone' : 'Edit Milestone'}</h3>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div className="bg-card border-2 border-border rounded-2xl shadow-elevated w-full max-w-xl p-6 space-y-5">
+        <div className="flex items-center justify-between pb-2 border-b border-border">
+          <h3 className="text-xl font-bold tracking-tight">{isNew ? 'Create Milestone' : 'Edit Milestone'}</h3>
           <Button variant="ghost" onClick={onClose}>Close</Button>
         </div>
 

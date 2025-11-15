@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
   content: [
     './index.html',
     './src/**/*.{ts,tsx}',
@@ -11,12 +10,15 @@ export default {
         display: ['ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        card: 'hsl(var(--card))',
-        primary: 'hsl(var(--primary))',
-        muted: 'hsl(var(--muted))',
-        'muted-foreground': 'hsl(var(--muted-foreground))',
+        background: 'rgb(var(--background))',
+        foreground: 'rgb(var(--foreground))',
+        card: 'rgb(var(--card))',
+        primary: 'rgb(var(--primary))',
+        'primary-hover': 'rgb(var(--primary-hover))',
+        muted: 'rgb(var(--muted))',
+        'muted-foreground': 'rgb(var(--muted-foreground))',
+        border: 'rgb(var(--border))',
+        accent: 'rgb(var(--accent))',
       },
     },
   },

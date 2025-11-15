@@ -229,8 +229,8 @@ export default function GanttPreview() {
   }
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
-      <div className="flex-shrink-0 p-4 border-b">
+    <div className="h-screen bg-gradient-to-br from-background via-background to-muted/30 flex flex-col overflow-hidden">
+      <div className="flex-shrink-0 p-4 border-b border-border bg-card/80 backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <Button
             onClick={() => navigate(`/editor/${project.id}`)}
@@ -335,6 +335,8 @@ export default function GanttPreview() {
               timelineMode={timelineMode}
               previewMode
               showCurrentDay={showCurrentDay}
+              onTaskClick={undefined}
+              onMilestoneClick={undefined}
             />
           </div>
         </div>

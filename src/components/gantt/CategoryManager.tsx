@@ -54,10 +54,10 @@ export function CategoryManager({ projectId, categories, onClose }: {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
-      <div className="bg-card border rounded-lg w-full max-w-xl max-h-[90vh] flex flex-col">
-        <div className="flex items-center justify-between p-6 pb-4 border-b flex-shrink-0">
-          <h3 className="text-lg font-semibold">Manage Categories</h3>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div className="bg-card border-2 border-border rounded-2xl shadow-elevated w-full max-w-xl max-h-[90vh] flex flex-col">
+        <div className="flex items-center justify-between p-6 pb-4 border-b border-border flex-shrink-0">
+          <h3 className="text-xl font-bold tracking-tight">Manage Categories</h3>
           <Button variant="ghost" onClick={onClose}>Close</Button>
         </div>
 

@@ -409,16 +409,23 @@ export function GanttChart({
     <div className={`w-full ${previewMode ? "" : "overflow-x-auto"}`}>
       {/* Category Legend */}
       {categories.length > 0 && (
-        <div className="mb-4 p-4 bg-muted/50 rounded-lg border">
-          <h4 className="text-sm font-semibold mb-2">Categories</h4>
+        <div className="mb-6 p-5 bg-gradient-to-br from-muted/60 to-muted/40 rounded-2xl border border-border shadow-soft">
+          <h4 className="text-sm font-bold mb-3 text-foreground tracking-wide uppercase">
+            Categories
+          </h4>
           <div className="flex flex-wrap gap-3">
             {categories.map((cat) => (
-              <div key={cat.id} className="flex items-center gap-2">
+              <div
+                key={cat.id}
+                className="flex items-center gap-2.5 px-3 py-1.5 bg-card rounded-xl border border-border shadow-soft"
+              >
                 <div
-                  className="w-4 h-4 rounded"
+                  className="w-3.5 h-3.5 rounded-full shadow-sm"
                   style={{ backgroundColor: cat.color }}
                 />
-                <span className="text-sm">{cat.name}</span>
+                <span className="text-sm font-medium text-foreground">
+                  {cat.name}
+                </span>
               </div>
             ))}
           </div>
@@ -443,7 +450,7 @@ export function GanttChart({
         <div
           className="grid relative"
           style={{
-            gridTemplateColumns: hasSubtasks ? `200px 80px 1fr` : `280px 1fr`,
+            gridTemplateColumns: hasSubtasks ? `150px 130px 1fr` : `280px 1fr`,
           }}
         >
           {/* Task name column header (empty, just for spacing) */}
@@ -664,8 +671,13 @@ export function GanttChart({
                           style={{ backgroundColor: rowBackgroundColor }}
                         >
                           <button
-                            className="text-left hover:underline"
-                            onClick={() => onTaskClick?.(task)}
+                            className={`text-left text-sm ${
+                              previewMode
+                                ? "cursor-default"
+                                : "hover:underline cursor-pointer"
+                            }`}
+                            onClick={() => !previewMode && onTaskClick?.(task)}
+                            disabled={previewMode}
                           >
                             {task.name}
                           </button>
@@ -744,7 +756,7 @@ export function GanttChart({
                               </>
                             )}
                           </div>
-                          <div className="relative h-10">
+                          <div className="relative h-12">
                             {intervals.map((interval) => {
                               let startIdx = days.findIndex(
                                 (d) => d >= interval.start_date
@@ -787,12 +799,13 @@ export function GanttChart({
                               return (
                                 <div
                                   key={interval.id}
-                                  className="absolute top-2 h-6 rounded-md border-2"
+                                  className="absolute h-8 rounded-md border-2"
                                   style={{
                                     left: `${left}%`,
                                     width: `${width}%`,
                                     borderColor: borderColor,
                                     backgroundColor: intervalBackgroundColor,
+                                    top: "calc(50% - 16px)",
                                   }}
                                   title={`${interval.start_date} → ${interval.end_date}`}
                                 />
@@ -812,7 +825,7 @@ export function GanttChart({
               <div
                 className="grid"
                 style={{
-                  gridTemplateColumns: `200px 80px 1fr`,
+                  gridTemplateColumns: `150px 130px 1fr`,
                 }}
               >
                 {rows.map((row, rowIdx) => {
@@ -858,8 +871,16 @@ export function GanttChart({
                             }}
                           >
                             <button
-                              className="text-center hover:underline font-semibold px-2"
-                              onClick={() => onTaskClick?.(row.overklasseTask!)}
+                              className={`text-center font-semibold px-2 text-sm ${
+                                previewMode
+                                  ? "cursor-default"
+                                  : "hover:underline cursor-pointer"
+                              }`}
+                              onClick={() =>
+                                !previewMode &&
+                                onTaskClick?.(row.overklasseTask!)
+                              }
+                              disabled={previewMode}
                             >
                               {row.overklasseTask.name}
                             </button>
@@ -872,8 +893,15 @@ export function GanttChart({
                             style={{ backgroundColor: rowBackgroundColor }}
                           >
                             <button
-                              className="text-center hover:underline font-semibold px-2"
-                              onClick={() => onTaskClick?.(task)}
+                              className={`text-center font-semibold px-2 text-sm ${
+                                previewMode
+                                  ? "cursor-default"
+                                  : "hover:underline cursor-pointer"
+                              }`}
+                              onClick={() =>
+                                !previewMode && onTaskClick?.(task)
+                              }
+                              disabled={previewMode}
                             >
                               {task.name}
                             </button>
@@ -887,8 +915,13 @@ export function GanttChart({
                           style={{ backgroundColor: rowBackgroundColor }}
                         >
                           <button
-                            className="text-left hover:underline"
-                            onClick={() => onTaskClick?.(task)}
+                            className={`text-left text-sm ${
+                              previewMode
+                                ? "cursor-default"
+                                : "hover:underline cursor-pointer"
+                            }`}
+                            onClick={() => !previewMode && onTaskClick?.(task)}
+                            disabled={previewMode}
                           >
                             {task.name}
                           </button>
@@ -906,8 +939,15 @@ export function GanttChart({
                         >
                           {isSubklasse ? (
                             <button
-                              className="text-left hover:underline"
-                              onClick={() => onTaskClick?.(task)}
+                              className={`text-left text-sm ${
+                                previewMode
+                                  ? "cursor-default"
+                                  : "hover:underline cursor-pointer"
+                              }`}
+                              onClick={() =>
+                                !previewMode && onTaskClick?.(task)
+                              }
+                              disabled={previewMode}
                             >
                               {task.name}
                             </button>
@@ -991,7 +1031,7 @@ export function GanttChart({
                             </>
                           )}
                         </div>
-                        <div className="relative h-10">
+                        <div className="relative h-12">
                           {intervals.map((interval) => {
                             // Find the index of the start and end dates in the days array
                             // If date is before project start, use 0
@@ -1046,12 +1086,13 @@ export function GanttChart({
                             return (
                               <div
                                 key={interval.id}
-                                className="absolute top-2 h-6 rounded-md border-2"
+                                className="absolute h-8 rounded-md border-2"
                                 style={{
                                   left: `${left}%`,
                                   width: `${width}%`,
                                   borderColor: borderColor,
                                   backgroundColor: intervalBackgroundColor,
+                                  top: "calc(50% - 16px)",
                                 }}
                                 title={`${interval.start_date} → ${interval.end_date}`}
                               />
@@ -1072,20 +1113,20 @@ export function GanttChart({
               className="grid items-stretch"
               style={{
                 gridTemplateColumns: hasSubtasks
-                  ? `200px 80px 1fr`
+                  ? `150px 130px 1fr`
                   : `280px 1fr`,
               }}
             >
-              {hasSubtasks && (
-                <div className="border-b bg-yellow-50 dark:bg-yellow-900/20" />
-              )}
-              {hasSubtasks && (
-                <div className="border-b bg-yellow-50 dark:bg-yellow-900/20" />
-              )}
-              <div className="border-b p-2 bg-yellow-50 dark:bg-yellow-900/20">
+              {/* Overklasse kolonne - "Milestones" tekst */}
+              <div className="border-b border-r bg-yellow-50 flex items-center justify-center">
                 <div className="text-sm font-semibold">Milestones</div>
               </div>
-              <div className="border-b border-r relative bg-yellow-50 dark:bg-yellow-900/20">
+
+              {/* Subklasse kolonne (only if hasSubtasks) */}
+              {hasSubtasks && <div className="border-b bg-yellow-50" />}
+
+              {/* Timeline area */}
+              <div className="border-b border-r relative bg-yellow-50">
                 <div className="relative h-12">
                   {/* Current day date label in milestones row */}
                   {showCurrentDayLine && currentDayPercent !== null && (
@@ -1101,13 +1142,52 @@ export function GanttChart({
                     </div>
                   )}
                   {(() => {
+                    // Build rows array for milestone calculation (same as task rows)
+                    const milestoneRows: Array<{
+                      type: "overklasse" | "subklasse";
+                      task: Task;
+                      parentTask?: Task;
+                      overklasseTask?: Task;
+                      isFirstSubtask?: boolean;
+                      subtaskCount?: number;
+                    }> = [];
+
+                    for (const overklasse of overklasseTasks) {
+                      const subklasseTasks =
+                        tasksByParent.get(overklasse.id) || [];
+
+                      if (subklasseTasks.length > 0) {
+                        subklasseTasks.forEach((subklasse, idx) => {
+                          milestoneRows.push({
+                            type: "subklasse",
+                            task: subklasse,
+                            parentTask: overklasse,
+                            overklasseTask: overklasse,
+                            isFirstSubtask: idx === 0,
+                            subtaskCount: subklasseTasks.length,
+                          });
+                        });
+                      } else {
+                        milestoneRows.push({
+                          type: "overklasse",
+                          task: overklasse,
+                        });
+                      }
+                    }
+
                     // Sort milestones by date to assign numbers
                     const sortedMilestones = [...milestones]
                       .filter((m) => {
-                        const taskIdx = tasks.findIndex(
-                          (t) => t.id === m.task_id
+                        // Only show milestones for subtasks (or tasks without subtasks)
+                        const task = tasks.find((t) => t.id === m.task_id);
+                        if (!task) return false;
+                        // If task is a subtask, show it
+                        if (task.parent_task_id) return true;
+                        // If task is overklasse, only show if it has no subtasks
+                        const hasSubtasks = tasks.some(
+                          (t) => t.parent_task_id === task.id
                         );
-                        return taskIdx >= 0;
+                        return !hasSubtasks;
                       })
                       .sort((a, b) => a.date.localeCompare(b.date));
 
@@ -1116,48 +1196,66 @@ export function GanttChart({
                       sortedMilestones.map((m, index) => [m.id, index + 1])
                     );
 
-                    return sortedMilestones.map((m) => {
-                      const idx = days.findIndex((d) => d >= m.date);
-                      const left = (Math.max(0, idx) / days.length) * 100;
-                      const taskIdx = tasks.findIndex(
-                        (t) => t.id === m.task_id
-                      );
-                      const milestoneNumber = milestoneNumberMap.get(m.id) || 1;
+                    return sortedMilestones
+                      .map((m) => {
+                        const idx = days.findIndex((d) => d >= m.date);
+                        const left = (Math.max(0, idx) / days.length) * 100;
+                        const milestoneNumber =
+                          milestoneNumberMap.get(m.id) || 1;
 
-                      // Calculate height: each task row is ~50px (border + padding + h-10)
-                      // Line goes from milestone row (bottom at 0) up to the TOP border of the task row
-                      // taskIdx 0 is first task (top), taskIdx tasks.length-1 is last task (just above milestone row)
-                      // We need to go up (tasks.length - taskIdx) rows to reach the task row
-                      // But we want to stop at the TOP border of the task row, not go through it
-                      const rowsBetween = tasks.length - taskIdx;
-                      // Each row is ~50px. We want to stop right at the top border of the task row
-                      // Subtract 3px to ensure the line stops before entering the task row (accounting for border thickness)
-                      const lineHeight = rowsBetween * 41;
-                      return (
-                        <div
-                          key={m.id}
-                          className="absolute"
-                          style={{
-                            left: `${left}%`,
-                            transform: "translateX(-50%)",
-                          }}
-                        >
+                        // Find the row index for this milestone's task in milestoneRows
+                        const rowIdx = milestoneRows.findIndex(
+                          (r) => r.task.id === m.task_id
+                        );
+
+                        if (rowIdx < 0) {
+                          // Task not found, skip this milestone
+                          return null;
+                        }
+
+                        // Calculate height: each task row is approximately 50px (border + padding + h-12)
+                        // Line goes from milestone row (top at 0) up to the TOP border of the task row
+                        // rowIdx 0 is first task (top), rowIdx milestoneRows.length-1 is last task (just above milestone row)
+                        // We need to go up (milestoneRows.length - rowIdx) rows to reach the task row
+                        const rowsBetween = milestoneRows.length - rowIdx;
+                        // Each row is approximately 50px. We want to stop right at the top border of the task row
+                        const lineHeight = rowsBetween * 50;
+                        return (
                           <div
-                            className="absolute border-l-4 border-yellow-400 cursor-pointer hover:border-yellow-500 pointer-events-auto z-10"
+                            key={m.id}
+                            className="absolute"
                             style={{
-                              top: `-${lineHeight}px`,
+                              left: `${left}%`,
+                              transform: "translateX(-50%)",
+                              top: 0,
                               bottom: 0,
-                              height: `${lineHeight}px`,
                             }}
-                            onClick={() => onMilestoneClick?.(m)}
-                            title={m.title}
-                          />
-                          <div className="absolute top-0 -translate-x-1/2 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-xs px-2 py-1 rounded shadow whitespace-nowrap pointer-events-auto z-20 font-semibold">
-                            {milestoneNumber}
+                          >
+                            {/* Yellow line going up to task row */}
+                            <div
+                              className={`absolute border-l-4 border-yellow-400 pointer-events-auto z-10 ${
+                                previewMode
+                                  ? "cursor-default"
+                                  : "cursor-pointer hover:border-yellow-500"
+                              }`}
+                              style={{
+                                top: `-${lineHeight}px`,
+                                bottom: 0,
+                                height: `${lineHeight}px`,
+                              }}
+                              onClick={() =>
+                                !previewMode && onMilestoneClick?.(m)
+                              }
+                              title={m.title}
+                            />
+                            {/* Milestone number box - positioned at top of milestone row */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded shadow whitespace-nowrap pointer-events-auto z-20 font-semibold">
+                              {milestoneNumber}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    });
+                        );
+                      })
+                      .filter(Boolean);
                   })()}
                 </div>
               </div>
@@ -1169,31 +1267,51 @@ export function GanttChart({
       {/* Milestones table */}
       {milestones.length > 0 && (
         <div className="mt-8">
-          <h3 className="text-lg font-semibold mb-4">Milestones</h3>
-          <div className="border rounded-lg overflow-hidden">
+          <h3 className="text-xl font-bold mb-5 tracking-tight">Milestones</h3>
+          <div className="border-2 border-border rounded-2xl overflow-hidden shadow-soft">
             <table className="w-full">
-              <thead className="bg-muted">
+              <thead className="bg-gradient-to-r from-muted/80 to-muted/60">
                 <tr>
-                  <th className="text-left p-3 text-sm font-semibold">
+                  <th className="text-left p-4 text-sm font-bold text-foreground">
                     Number
                   </th>
-                  <th className="text-left p-3 text-sm font-semibold">
+                  <th className="text-left p-4 text-sm font-bold text-foreground">
                     Description
                   </th>
-                  <th className="text-left p-3 text-sm font-semibold">Date</th>
-                  <th className="text-left p-3 text-sm font-semibold">Task</th>
+                  <th className="text-left p-4 text-sm font-bold text-foreground">
+                    Date
+                  </th>
+                  <th className="text-left p-4 text-sm font-bold text-foreground">
+                    Task
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {[...milestones]
-                  .sort((a, b) => a.date.localeCompare(b.date))
-                  .map((m, index) => {
+                {(() => {
+                  // Filter milestones to only show those for subtasks (or tasks without subtasks)
+                  const filteredMilestones = [...milestones]
+                    .filter((m) => {
+                      const task = tasks.find((t) => t.id === m.task_id);
+                      if (!task) return false;
+                      // If task is a subtask, show it
+                      if (task.parent_task_id) return true;
+                      // If task is overklasse, only show if it has no subtasks
+                      const hasSubtasks = tasks.some(
+                        (t) => t.parent_task_id === task.id
+                      );
+                      return !hasSubtasks;
+                    })
+                    .sort((a, b) => a.date.localeCompare(b.date));
+
+                  return filteredMilestones.map((m, index) => {
                     const task = tasks.find((t) => t.id === m.task_id);
                     return (
                       <tr
                         key={m.id}
-                        className="border-t hover:bg-muted/50 cursor-pointer"
-                        onClick={() => onMilestoneClick?.(m)}
+                        className={`border-t ${
+                          previewMode ? "" : "hover:bg-muted/50 cursor-pointer"
+                        }`}
+                        onClick={() => !previewMode && onMilestoneClick?.(m)}
                       >
                         <td className="p-3 text-sm font-semibold">
                           {index + 1}
@@ -1207,7 +1325,8 @@ export function GanttChart({
                         </td>
                       </tr>
                     );
-                  })}
+                  });
+                })()}
               </tbody>
             </table>
           </div>
