@@ -420,10 +420,24 @@ export function GanttChart({
                 className="flex items-center gap-2.5 px-3 py-1.5 bg-card rounded-xl border border-border shadow-soft"
               >
                 <div
-                  className="w-3.5 h-3.5 rounded-full shadow-sm"
-                  style={{ backgroundColor: cat.color }}
+                  className="rounded-full shadow-sm flex-shrink-0"
+                  style={{
+                    backgroundColor: cat.color,
+                    width: "14px",
+                    height: "14px",
+                    minWidth: "14px",
+                    minHeight: "14px",
+                    alignSelf: "center",
+                  }}
                 />
-                <span className="text-sm font-medium text-foreground">
+                <span
+                  className="text-sm font-medium text-foreground"
+                  style={{
+                    lineHeight: "1.5rem",
+                    display: "inline-block",
+                    verticalAlign: "middle",
+                  }}
+                >
                   {cat.name}
                 </span>
               </div>

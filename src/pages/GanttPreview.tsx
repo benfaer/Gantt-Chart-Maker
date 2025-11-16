@@ -136,26 +136,49 @@ export default function GanttPreview() {
   };
 
   const exportToPDF = async () => {
-    if (!chartRef.current) return;
+    if (!containerRef.current || !chartRef.current) return;
     setExporting(true);
 
     // Wait for next frame to ensure layout is stable
     await new Promise((resolve) => requestAnimationFrame(resolve));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
-    // Temporarily remove scale transform for export
-    const originalTransform = chartRef.current.style.transform;
-    const originalWidth = chartRef.current.style.width;
-    chartRef.current.style.transform = "none";
-    chartRef.current.style.width = "auto";
+    // Create a temporary container that includes title + full chart (with categories)
+    const titleSection = containerRef.current.querySelector(".w-full.mb-4");
+    const tempContainer = document.createElement("div");
+    tempContainer.style.position = "absolute";
+    tempContainer.style.left = "-9999px";
+    tempContainer.style.width = chartRef.current.scrollWidth + "px";
+    tempContainer.style.backgroundColor = "#fafafc";
+    tempContainer.style.padding = "32px";
 
-    // Wait again for layout to update
-    await new Promise((resolve) => requestAnimationFrame(resolve));
+    // Clone title section
+    if (titleSection) {
+      const clonedTitle = titleSection.cloneNode(true) as HTMLElement;
+      tempContainer.appendChild(clonedTitle);
+    }
 
-    const canvas = await html2canvas(chartRef.current, {
+    // Clone the entire chart (which includes categories)
+    const clonedChart = chartRef.current.cloneNode(true) as HTMLElement;
+    clonedChart.style.transform = "none";
+    clonedChart.style.width = "auto";
+    tempContainer.appendChild(clonedChart);
+
+    document.body.appendChild(tempContainer);
+
+    // Capture the temporary container
+    const canvas = await html2canvas(tempContainer, {
       scale: 2,
       logging: false,
       useCORS: true,
+      backgroundColor: "#fafafc",
+      allowTaint: false,
+      removeContainer: false,
     });
+
+    // Clean up
+    document.body.removeChild(tempContainer);
+
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF({
       orientation: canvas.width > canvas.height ? "landscape" : "portrait",
@@ -165,37 +188,52 @@ export default function GanttPreview() {
     pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
     pdf.save(`${project?.title || "gantt-chart"}.pdf`);
 
-    // Restore transform
-    chartRef.current.style.transform = originalTransform;
-    chartRef.current.style.width = originalWidth;
     setExporting(false);
   };
 
   const exportToImage = async () => {
-    if (!chartRef.current) return;
+    if (!containerRef.current || !chartRef.current) return;
     setExporting(true);
 
     // Wait for next frame to ensure layout is stable
     await new Promise((resolve) => requestAnimationFrame(resolve));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
-    // Temporarily remove scale transform for export
-    const originalTransform = chartRef.current.style.transform;
-    const originalWidth = chartRef.current.style.width;
-    chartRef.current.style.transform = "none";
-    chartRef.current.style.width = "auto";
+    // Create a temporary container that includes title + full chart (with categories)
+    const titleSection = containerRef.current.querySelector(".w-full.mb-4");
+    const tempContainer = document.createElement("div");
+    tempContainer.style.position = "absolute";
+    tempContainer.style.left = "-9999px";
+    tempContainer.style.width = chartRef.current.scrollWidth + "px";
+    tempContainer.style.backgroundColor = "#fafafc";
+    tempContainer.style.padding = "32px";
 
-    // Wait again for layout to update
-    await new Promise((resolve) => requestAnimationFrame(resolve));
+    // Clone title section
+    if (titleSection) {
+      const clonedTitle = titleSection.cloneNode(true) as HTMLElement;
+      tempContainer.appendChild(clonedTitle);
+    }
 
-    const canvas = await html2canvas(chartRef.current, {
+    // Clone the entire chart (which includes categories)
+    const clonedChart = chartRef.current.cloneNode(true) as HTMLElement;
+    clonedChart.style.transform = "none";
+    clonedChart.style.width = "auto";
+    tempContainer.appendChild(clonedChart);
+
+    document.body.appendChild(tempContainer);
+
+    // Capture the temporary container
+    const canvas = await html2canvas(tempContainer, {
       scale: 2,
       logging: false,
       useCORS: true,
+      backgroundColor: "#fafafc",
+      allowTaint: false,
+      removeContainer: false,
     });
 
-    // Restore transform
-    chartRef.current.style.transform = originalTransform;
-    chartRef.current.style.width = originalWidth;
+    // Clean up
+    document.body.removeChild(tempContainer);
 
     canvas.toBlob((blob) => {
       if (blob) {
